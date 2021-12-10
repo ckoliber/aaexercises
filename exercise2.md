@@ -120,7 +120,7 @@ Now, we can see, if the **Elements Sum** is a **Polynomial** function of **Array
 
 ## Problem 3
 
-We are going to implement a **Brute-Force Algorithm**, that will solve the `MAX-SAT` problem:
+We are going to implement a **Back-Tracking Algorithm**, that will solve the `MAX-SAT` problem:
 
 ```typescript
 const MaxSat = (
@@ -198,129 +198,68 @@ Now, we can see, the complexity of algorithm is depends on the number of variabl
 
 ## Problem 4
 
-```typescript
-const kVertexCover = (graph: number[][], k: number): boolean => {
-    const n = array.length;
-    let vertices = new Set();
-
-    // Generate each combination of graph vertices O(n) [Parallel]
-    for (let i = 0 ; i < n ; i++) {
-        if (fork({0,1}) == 1) {
-            vertices.add(i);
-        }
-    }
-
-    // Validate selected set size is less than or equals to K O(1) [Sequential]
-    if (vertices.size() > k) {
-        exit(-1);
-    }
-
-    // Validate for each edge, at least one side vertex exists in selected set O(n^2) [Sequential]
-    for (let i = 0 ; i < n ; i++) {
-        for (let j = 0 ; j < n ; j++) {
-            if (graph[i][j] != null && !vertices.contains(i) && !vertices.contains(j)) {
-                exit(-1);
-            }
-        }
-    }
-
-    return true;
-};
-```
-
 ---
 
 ## Problem 5
 
-### (a)
+We are going to implement a **Back-Tracking Algorithm**, then we will do some optimizations and introduce a new **Branch-and-Bound Algorithm** for it:
 
-$$
-\begin{aligned}
-    & \Phi =
-    (\overline{x_2} \,\or\, \overline{x_3} \,\or\, \overline{x_4}) \and
-    (\overline{x_1} \,\or\, {x_2} \,\or\, \overline{x_4}) \and
-    (\overline{x_2} \,\or\, {x_3} \,\or\, \overline{x_5}) \and
-    ({x_1} \,\or\, \overline{x_3} \,\or\, \overline{x_5})
-    \\
-    \\
-    & \begin{cases}
-    x_1 = \text{False}
-    \\
-    x_2 = \text{False}
-    \\
-    x_3 = \text{False}
-    \\
-    x_4 = \text{False}
-    \\
-    x_5 = \text{False}
-    \end{cases}
-    \\
-    \\
-    \implies & \Phi =
-    (\text{T} \,\or\, \text{T} \,\or\, \text{T}) \and
-    (\text{T} \,\or\, \text{F} \,\or\, \text{T}) \and
-    (\text{T} \,\or\, \text{F} \,\or\, \text{T}) \and
-    (\text{F} \,\or\, \text{T} \,\or\, \text{T})
-    \\
-    \implies & \Phi = (\text{T}) \and (\text{T}) \and (\text{T}) \and (\text{T})
-    \\
-    \implies & \Phi = \text{T}
-\end{aligned}
-$$
+```typescript
+let minCost = Math.MAX;
+const MinCostSetCover = (
+    sets: number[][],
+    costs: number[],
+    universe: number[],
+    selectedSets: number[] = [],
+    selectedCost: number = 0
+) => {
+    const currentLevel = selectedSets.length;
 
----
+    // Validate the answer (Back-Track finish)
+    if (selectedSets.length == sets.length) {
+        // Check the selected sets contains universe elements
+        // Then check selectedCost is less than min cost
+        if (selectedSets.contains(universe) && selectedCost < minCost) {
+            minCost = selectedCost;
+            return;
+        }
+    }
 
-### (b)
+    // Branch-and-Bound optimization
+    // The current cost is greater than minCost
+    // We already have another good solution
+    // Just drop the branch
+    if (selectedCost > minCost) {
+        return;
+    }
 
-$$
-\begin{aligned}
-    & \Phi =
-    (\overline{x_2} \,\or\, \overline{x_3} \,\or\, \overline{x_4}) \and
-    (\overline{x_1} \,\or\, {x_2} \,\or\, \overline{x_4}) \and
-    (\overline{x_2} \,\or\, {x_3} \,\or\, \overline{x_5}) \and
-    ({x_1} \,\or\, \overline{x_3} \,\or\, \overline{x_5})
-    \\
-    \\
-    & \begin{cases}
-    x_1 = \text{True}
-    \\
-    x_2 = \text{True}
-    \\
-    x_3 = \text{True}
-    \\
-    x_4 = \text{True}
-    \\
-    x_5 = \text{True}
-    \end{cases}
-    \\
-    \\
-    \implies & \Phi =
-    (\text{F} \,\or\, \text{F} \,\or\, \text{F}) \and
-    (\text{F} \,\or\, \text{T} \,\or\, \text{F}) \and
-    (\text{F} \,\or\, \text{T} \,\or\, \text{F}) \and
-    (\text{T} \,\or\, \text{F} \,\or\, \text{F})
-    \\
-    \implies & \Phi = (\text{F}) \and (\text{T}) \and (\text{T}) \and (\text{T})
-    \\
-    \implies & \Phi = \text{F}
-\end{aligned}
-$$
+    // Branch-and-Bound optimization
+    // The current selection, contains universe
+    // We don't need to peek any other sets
+    if (!selectedSets.contains(universe)) {
+        MinCostSetCover(
+            sets,
+            costs,
+            universe,
+            [...selectedSets, true],
+            selectedCost + costs[currentLevel]
+        );
+    }
 
----
+    MinCostSetCover(
+        sets,
+        costs,
+        universe,
+        [...selectedSets, false],
+        selectedCost
+    );
+};
+```
 
-### (c)
+As we can see, there are two types of optimizations over the **Back-Tracking Algorithm**:
 
--   **K-Clique**: This picture is not complete !
-
-![test.drawio (1)](C:\Users\KoLiBer\Downloads\test.drawio (1).png)
-
--   **K-VertexCover**:
-
-![test.drawio (2)](C:\Users\KoLiBer\Downloads\test.drawio (4).png)
-
--   **Subset Sum**:
-
-![Book1](C:\Users\KoLiBer\Downloads\Book1.png)
+1. **Selected Cost Validate**: Check the current cost is not greater than `minCost`
+2. **Selected Sets Validate**: Check the current sets does not contains the `universe`
 
 ---
 
