@@ -196,10 +196,6 @@ Now, we can see, the complexity of algorithm is depends on the number of variabl
 
 ---
 
-## Problem 4
-
----
-
 ## Problem 5
 
 We are going to implement a **Back-Tracking Algorithm**, then we will do some optimizations and introduce a new **Branch-and-Bound Algorithm** for it:
@@ -272,9 +268,5 @@ Using some **Branch-and-Bound** optimizations we can reduce the complexity of ge
 If the number of **Semi-Critical** nodes in a **B&B Tree** is $O(P(n))$, then the number of **Semi-Critical** and **Critical** nodes are $O(P(n))$
 
 So the entire possible solutions to be validated is in $O(P(n))$, and the **Branch-and-Bound** complexity will be $O(P(n) \times P(n)) = O(P(n))$.
-
----
-
-## Problem 7
 
 ---
