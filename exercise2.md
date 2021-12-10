@@ -120,48 +120,79 @@ Now, we can see, if the **Elements Sum** is a **Polynomial** function of **Array
 
 ## Problem 3
 
+We are going to implement a **Brute-Force Algorithm**, that will solve the `MAX-SAT` problem:
+
 ```typescript
-const k01Knapsack = (
-    weights: number[],
-    profits: number[],
-  	maxWeight: number,
-   	minProfit: number
-): boolean => {
-    const n = array.length;
-    let objects = new Set();
+const MaxSat = (
+    formula: number[][],
+    variablesCount: number,
+    variablesValues: number[]
+): number => {
+    // Time-Complexity: O(n)
+    // If all variables have an assignment
+    // find the max number of satisfiable clauses
+    if (variablesCount < 0) {
+        return satisfiableClauses(formula, variablesValues);
+    }
 
-    // Generate each combination of objects O(n) [Parallel]
-    for (let i = 0 ; i < n ; i++) {
-		if (fork({0,1}) == 1) {
-            objects.add(i);
+    // Time-Complexity: O(2^m)
+    // Select the maximum number of satisfiable clauses
+    // When last variable is true or false
+    return Math.max(
+        MaxSat(formula, variablesCount - 1, [true, ...variablesValues]),
+        MaxSat(formula, variablesCount - 1, [false, ...variablesValues])
+    );
+};
+
+// Time-Complexity: O(n)
+// Find the number of satisfiable clauses by an assignment of variables
+const satisfiableClauses = (formula: number[][], variablesValues: number[]) => {
+    let satisfiableClauses = 0;
+
+    // Iterate over each clause and check is satisfiable
+    for (const clause in formula) {
+        if (isSatisfiableClause(clause, variablesValues)) {
+            satisfiableClauses++;
         }
     }
 
-    // Validate selected objects weight sum is not greater than maxWeight O(n) [Sequential]
-    let weightSum = 0;
-    for (let i = 0 ; i < n ; i++) {
-        if (objects.contains(i)) {
-            weightSum += weights[i];
+    return satisfiableClauses;
+};
+
+// Check the clause is satisfiable or not
+const isSatisfiableClause = (clause: number[], variablesValues: number[]) => {
+    // Iterate over literals and find at least one true valued literal
+    for (const literal in clause) {
+        if (
+            (variablesValues[Math.abs(literal)] && literal > 0) ||
+            (!variablesValues[Math.abs(literal)] && literal < 0)
+        ) {
+            return true;
         }
     }
-    if (weightSum > maxWeight) {
-        exit(-1);
-    }
 
-   	// Validate selected objects profit sum is not less than minProfit O(n) [Sequential]
-    let profitSum = 0;
-    for (let i = 0 ; i < n ; i++) {
-        if (objects.contains(i)) {
-            profitSum += profits[i];
-        }
-    }
-    if (profitSum < minProfit) {
-        exit(-1);
-    }
-
-    return true;
+    return false;
 };
 ```
+
+The time complexity analysis of the algorithm above is as follows:
+
+$$
+\begin{aligned}
+	& n: \text{Number of literals in entire formula}
+	\\
+	& m: \text{Number of variables in entire formula}
+	\\ \\
+	& \texttt{Find number of satisfiable clauses}: O(n)
+	\\
+	& \texttt{Generate each permutation of variables assignment}: O(2^m)
+	\\
+	\\
+	& Complexity = O(n) \times O(2^m) = O(n \times 2^m)
+\end{aligned}
+$$
+
+Now, we can see, the complexity of algorithm is depends on the number of variables, so the **MAX-SAT** problem is `fixed-parameter tractable` according to **Number of variables**.
 
 ---
 
