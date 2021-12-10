@@ -265,6 +265,14 @@ As we can see, there are two types of optimizations over the **Back-Tracking Alg
 
 ## Problem 6
 
+As we know, the complexity of a **Back-Tracking** algorithm (**Branch-and-Bound** without any optimization) is about $O(Exp(n) \times P(n))$ where the $Exp(n)$ (`Exponential`) is the complexity of generating all possible solutions, and the $P(n)$ (`Polynomial`) is the complexity of validating a specific solution.
+
+Using some **Branch-and-Bound** optimizations we can reduce the complexity of generating solutions, or in other word, we can filter some invalid solutions and drop the entire branch.
+
+If the number of **Semi-Critical** nodes in a **B&B Tree** is $O(P(n))$, then the number of **Semi-Critical** and **Critical** nodes are $O(P(n))$
+
+So the entire possible solutions to be validated is in $O(P(n))$, and the **Branch-and-Bound** complexity will be $O(P(n) \times P(n)) = O(P(n))$.
+
 ---
 
 ## Problem 7
