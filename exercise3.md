@@ -418,7 +418,7 @@ As we can see the complexity of the above local-transformation function is:
 
 $$
 \begin{aligned}
-    & O(n) \times O(e) = O(n^3)
+    & O(e) \times O(e) = O(n^4)
 \end{aligned}
 $$
 
