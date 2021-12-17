@@ -307,6 +307,36 @@ $$
 
 ## Problem 2
 
+We know this **Lemma**:
+
+$$
+\begin{aligned}
+    \begin{Bmatrix}
+        \text{NSS: polynomial feasable solution}
+        \\
+        \text{U: integer-valued problem}
+        \\
+        \text{U: cost-bounded problem}
+        \\
+        \text{U: strongly NP-Hard}
+        \\
+        \text{P != NP}
+    \end{Bmatrix} \implies
+    \text{U: doesn't posses exact-polynomialtime NSS}
+\end{aligned}
+$$
+
+If we find a polynomially reduction from a **SNPH** problem to this problem, we proved that **U doesn't possess an exact and polynomial-time searchable neighborhood**
+
+### $SAT \le_P Set-Intersection$
+
+-   For each **Literal** make a $B_i$ set contains $\{T_x, F_x\}$ which $x$ is the unique number of literal
+-   For each **Clause** make a $A_i$ set contains
+    -   $T_x$ if it contains positive form of literal
+    -   $F_x$ if it contains negative form of literal
+
+Now the satisfiable assignment of variables is contained in $S$ set.
+
 ---
 
 ## Problem 3
