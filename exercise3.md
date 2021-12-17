@@ -337,8 +337,89 @@ If we find a polynomially reduction from a **SNPH** problem to this problem, we 
 
 Now the satisfiable assignment of variables is contained in $S$ set.
 
+For example:
+
+$$
+\begin{aligned}
+    & X = (a \lor \neg{b} \lor c) \land (\neg{a} \lor \neg{c}) \land (b \lor c) \land (a \lor b)
+    \\
+    \\
+    & A_1 = \{T_a, F_b, T_c\}
+    \\
+    & A_1 = \{F_a, F_c\}
+    \\
+    & A_1 = \{T_b, T_c\}
+    \\
+    & A_1 = \{T_a, T_b\}
+    \\
+    \\
+    & B_1 = \{T_a, F_a\}
+    \\
+    & B_2 = \{T_b, F_b\}
+    \\
+    & B_3 = \{T_c, F_c\}
+\end{aligned}
+$$
+
 ---
 
 ## Problem 3
+
+-   The **Structure** of each answer is an **Array** with size of **Number of edges**, each item contains a number representing the **Edge Select or Not (0,1)**:
+
+    $$
+    \begin{aligned}
+        & \alpha = (0, 1, 0, 0, \dots, 1)
+    \end{aligned}
+    $$
+
+-   The **Initial Answer** can be an array full of $1$:
+
+    $$
+    \begin{aligned}
+        & \alpha_{init} = (1, 1, 1, 1, \dots, 1)
+    \end{aligned}
+    $$
+
+-   The **Cost Function** returns the sum of weights for selected edges in answer array, the goal is to **Minimize** the cost while keeping the structure as a connected tree:
+
+    $$
+    \begin{aligned}
+        & Cost(0, 1, 0, 1, 0) = x_1 + x_3
+    \end{aligned}
+    $$
+
+```js
+answer[] SteinerTreeTransform(problem, answer) {
+    // Create empty result set
+    let result = [];
+
+    for (i in answer) {
+        // Clone the answer
+        temp = answer;
+
+        // Toggle the edge select/drop
+        toggle(temp[i]);
+
+        // Time-Complexity: O(e) = O(n^2)
+        // Validate selected edges contains terminals
+        // Validate selected edges are connected
+        // Validate selected edges doesn't contains loops
+        if (validate(problem, temp)) {
+            result.add(temp);
+        }
+    }
+
+    return result;
+}
+```
+
+As we can see the complexity of the above local-transformation function is:
+
+$$
+\begin{aligned}
+    & O(n) \times O(e) = O(n^3)
+\end{aligned}
+$$
 
 ---
