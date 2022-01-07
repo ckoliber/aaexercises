@@ -20,9 +20,9 @@ $$
     & jobs = \begin{Bmatrix}
         m
         \\
-        m+1 & m+2 & \dots & 2m-1 & 2m
+        m & m+1 & m+2 & \dots & 2m-1
         \\
-        m+1 & m+2 & \dots & 2m-1 & 2m
+        m & m+1 & m+2 & \dots & 2m-1
     \end{Bmatrix}
 \end{aligned}
 $$
@@ -35,25 +35,25 @@ $$
     \\
     & n = 2 \times 3 + 1 = 7
     \\
-    & jobs = \{3, 4, 4, 5, 5, 6, 6\}
+    & jobs = \{3, 3, 3, 4, 4, 5, 5\}
     \\
     \\
     & \text{Greedy}:
     \\
-    & Machine_1 = \{6, 4, 3\} = 13
+    & Machine_1 = \{5, 3, 3\} = 11
     \\
-    & Machine_2 = \{6, 4\} = 10
+    & Machine_2 = \{5, 3\} = 8
     \\
-    & Machine_3 = \{5, 5\} = 10
+    & Machine_3 = \{4, 4\} = 8
     \\
     \\
     & \text{Optimal}:
     \\
-    & Machine_1 = \{6, 5\} = 11
+    & Machine_1 = \{5, 4\} = 9
     \\
-    & Machine_2 = \{6, 5\} = 11
+    & Machine_2 = \{5, 4\} = 9
     \\
-    & Machine_3 = \{4, 4, 3\} = 11
+    & Machine_3 = \{3, 3, 3\} = 9
 \end{aligned}
 $$
 
