@@ -238,6 +238,104 @@ So this algorithm is **2-Approximation**.
 
 ## Problem 5
 
+We will introduce an **PTAS** using **Greedy Algorithm** for this problem, and find it's **Complexity**, then we will prove that algorithm is **$(1+\epsilon)$-Approximation**
+
+---
+
+### Algorithm
+
+The algorithm is very simple:
+
+1. Begin with a brute force initial with size of $m = \frac{1}{\epsilon}$.
+2. Iterate over remaining items and add them to the smaller partition.
+
+```js
+(A, B) Partition(e, array) {
+    // O(2^m)
+    // Brute force of size m
+    let m = 1/e;
+    let (A, B) = BruteForcePartition(array[0..m]);
+
+    // O(n)
+    // Add remaining items to smaller set
+    for (let i = m ; i <= len(array) ; i++) {
+        if (sum(A) < sum(B)) {
+            A.append(array[i]);
+        } else {
+            B.append(array[i]);
+        }
+    }
+
+    return (A, B);
+}
+```
+
+As we can see the complexity of the above algorithm is:
+
+$$
+\begin{aligned}
+    & O(2^m + n) = O(n)
+\end{aligned}
+$$
+
+---
+
+### Approximation
+
+Now, we want to prove that the algorithm ratio is **$(1+\epsilon)$-Approximation**:
+
+-   We know that:
+
+    $$
+    \begin{aligned}
+        & H = \frac{\sum_{i=1}^{n} s_i}{2}
+        \\
+        \\
+        & \sum_{i \in A} s_i + \sum_{j \in B} s_j = 2.H
+    \end{aligned}
+    $$
+
+-   Now, the problem is about minimizing the diff between two sets:
+
+    $$
+    \begin{aligned}
+        & max\{\sum_{i \in A} s_i, \sum_{j \in B} s_j\} = H + \frac{D}{2}
+        \\
+        & D = \left|\sum_{i \in A} s_i - \sum_{j \in B} s_j\right|
+    \end{aligned}
+    $$
+
+-   The goal for each set, is to get closer to $H$:
+
+    $$
+    \begin{aligned}
+        & max\{\sum_{i \in A} s_i, \sum_{j \in B} s_j\} = H + \frac{D}{2}
+        \\
+        & D = \left|\sum_{i \in A} s_i - \sum_{j \in B} s_j\right|
+    \end{aligned}
+    $$
+
+-   Now, using the $m$ index in **Brute Force** part, we have:
+
+    $$
+    \begin{aligned}
+        & D \leq s_{m+1}
+    \end{aligned}
+    $$
+
+-   So we have:
+
+    $$
+    \begin{aligned}
+        & max\{\sum_{i \in A} s_i, \sum_{j \in B} s_j\} = H + \frac{D}{2} \leq H + \frac{s_{m+1}}{2}
+        \\
+        \\ \implies
+        & \frac{Cost(X)}{Opt} \leq \frac{H + \frac{1}{2}.s_{m+1}}{H} = 1 + \frac{\frac{1}{2}.s_{m+1}}{H} = 1 + \frac{\frac{1}{2}.s_{m+1}}{\frac{1}{2} \sum_{i=1}^{m+1} s_i}
+        \\ \leq
+        & 1 + \frac{s_{m+1}}{(m+1) . s_{m+1}} = 1 + \frac{1}{m+1} \lt 1 + \epsilon
+    \end{aligned}
+    $$
+
 ---
 
 ## Problem 6
