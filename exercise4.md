@@ -340,34 +340,69 @@ Now, we want to prove that the algorithm ratio is **$(1+\epsilon)$-Approximation
 
 ## Problem 6
 
-First instead of solving this problem directly, we solve a slightly harder problem where we have an additional requirement that some numbers $p$ and $q$ must be in $S_1$ and $S_2$.
+First we solve a restricted version of **SSSP Ratio**, then we will use it to solve **SSSP Ratio**
 
 ---
 
-### Restricted Subset Sum Problem
+### Restricted SSSP
 
-In this problem, in addition to $a_1, \dots,a_n$, we are given two integers $1 \leq p \lt q \leq n$ as part of the input.
+This is a harder version of SSSP which we have an additional rule for the largest values:
 
-Our goal is to find $S_1$ and $S_2$ as before, but we are restricted to $S_1$ and $S_2$ such that $\{max(S_1), max(S_2)\}=\{p, q\}$.
+$$
+\begin{aligned}
+    & \exists p,q : 1 \leq p \lt q \leq n
+    \\
+    & max(S_1) = p
+    \\
+    & max(S_2) = q
+\end{aligned}
+$$
 
-That is, each of $p$ and $q$ appears as the largest number in $S_1$ or $S_2$.
+Now, **SSSP Ratio** problem can be solved by running **SSSP Ratio Restricted** algorithm for all **p, q** values and finding the smallest ratio.
 
----
+So if we find a **FPTAS** for **SSSP Ratio Restricted**, then we can use it for **SSSP Ratio**
 
-### Pseudo-Polynomial time Algorithm
+Now we want to introduce a **$(1+\epsilon)$-Approximation** of $Poly(n, \frac{1}{\epsilon})$ for the **SSSP Ratio Restricted** problem:
 
-In this section we show that $P(\{a_1, \dots,a_n\}, p, q)$ can be solved in $poly(n,a_q)$ time.
+1. Introduce a **Pseudo-Polynomial Time** algorithm for **SSSP Ratio Restricted**
 
-One of many ways to solve this easy problem is to define a table $T_i[x, y]$, for any $i < q$ and $x y$.
+    - We can introduce a **Dynamic Programming** algorithm in $Poly(n, a_q)$ for finding a table concists
+    - After this table is computed, we find a pair $x \geq y$ such that $T_{q−1}[x, y] \neq \emptyset$
+    - Also $\frac{x}{y}$ is **Minimum**
 
-This table keeps one pair of disjoint sets $S_1, S_2 \subseteq \{1,...,i\} \cup \{p, q\}$
-such that $i \in S_1$ $a_i = x$, $j∈S2$ a $j=y$, and ${max S1,max S2}={p, q}$. This table can
-be computed easily as in Algorithm 1. (We note that Algorithm 1 may change the value of some entry Ti[x, y] many
-times. This is not necessary and could be avoided. However, we do not try to avoid this to keep the algorithm
-description simple.) After this table is computed, we find a
-pair x y such that Tq−1[x, y] = ∅ and x/y is minimum.
-We output the corresponding sets which yield a ratio of
-x/y
+2. Find a **FPTAS** for **SSSP Ratio Restricted**
+
+    - Now, we have a **$(1+\epsilon)$-Approximation** algorithm for the **SSSP Ratio Restricted**
+    - We can use this algorithm to finding a **FPTAS** for the problem
+
+    ```js
+    FPTAS({a1, ..., an}, p, q) {
+        if (n_ap < a_q) {
+            return {
+                S1 = {q},
+                S2 = {1, ..., p}
+            };
+        } else {
+            let delta = (epsillon / (3*n)) * a_p;
+            let items = {a1, ..., an}.map(a => a / delta);
+
+            // Find the optimal solution in Pseudo Polynomial
+            let S1_p, S2_p = PseudoPoly(items, p, q);
+
+            if (sum(S1_p) >= sum(S2_p)) {
+                return {
+                    S1 = S1_p,
+                    S2 = S2_p
+                };
+            } else {
+                return {
+                    S1 = S2_p,
+                    S2 = S1_p
+                };
+            }
+        }
+    }
+    ```
 
 ---
 
