@@ -373,6 +373,102 @@ x/y
 
 ## Problem 7
 
+We will introduce a **L-Reduction** for from problem **A** to problem **B**:
+
+-   **Problem A** (Vertex Cover\*): Select minimum number of vertices, adjacent to all other vertices
+
+    $$
+    \begin{aligned}
+        & Inputs = \begin{cases}
+            \text{Vertices}: int[]
+            \\
+            \text{Edges}: (int, int)[]
+        \end{cases}
+        \\
+        & Outputs = \begin{cases}
+            \text{Sub Vertices} \subseteq \text{Vertices}: int[]
+        \end{cases}
+    \end{aligned}
+    $$
+
+-   **Problem B** (Set Cover): Select minimum number of sets, covering universe items
+
+    $$
+    \begin{aligned}
+        & Inputs = \begin{cases}
+            \text{Sets}: (int[])[]
+            \\
+            \text{Universe}: int[]
+        \end{cases}
+        \\
+        & Outputs = \begin{cases}
+            \text{Sub Sets} \subseteq \text{Sets}: (int[])[]
+        \end{cases}
+    \end{aligned}
+    $$
+
+Now we will define two functions $R$, $S$ and two constants $\alpha$, $\beta$:
+
+-   **R Function**: Convert each vertex into a set, contains all adjacent vertices
+
+    ```js
+    Set[] R(Vertex[] vertices) {
+        let sets = [];
+
+        for (let vertex in vertices) {
+            sets.append({...vertex.adjacents()});
+        }
+
+        return sets;
+    }
+    ```
+
+-   **S Function**: Convert each set index to vertex index
+
+    ```js
+    Vertex[] S(Set[] sets) {
+        return sets;
+    }
+    ```
+
+-   **Constants**: Both problems are minimization and $\alpha = 1$, $\beta = 1$
+
+For example:
+
+$$
+\begin{aligned}
+    & \text{Vertex Cover*} = \begin{cases}
+        V = \{a, b, c, d, e\}
+        \\
+        E = \{ab, bc, cd, da, ae, ce\}
+    \end{cases}
+    \\
+    \\ \overset{R}{\implies}
+    & \text{Set Cover} = \begin{cases}
+        Universe = \{a, b, c, d, e\}
+        \\
+        Sets = \{S_a, S_b, S_c, S_d, S_e\}
+        \\
+        \\
+        S_a = \{b, d, e\}
+        \\
+        S_b = \{a, c\}
+        \\
+        S_c = \{b, d, e\}
+        \\
+        S_d = \{a, c\}
+        \\
+        S_e = \{a, c\}
+    \end{cases}
+    \\
+    \\ \overset{M}{\implies}
+    & \text{Set Cover Answer} = \{S_a, S_b\}
+    \\
+    \\ \overset{S}{\implies}
+    & \text{Vertex Cover* Answer} = \{a, b\}
+\end{aligned}
+$$
+
 ---
 
 ## Problem 8
