@@ -232,10 +232,6 @@ So this algorithm is **2-Approximation**.
 
 ---
 
-## Problem 4
-
----
-
 ## Problem 5
 
 We will introduce an **PTAS** using **Greedy Algorithm** for this problem, and find it's **Complexity**, then we will prove that algorithm is **$(1+\epsilon)$-Approximation**
@@ -507,5 +503,43 @@ $$
 ---
 
 ## Problem 8
+
+### (a)
+
+-   Put each item greater than $\frac{1}{2}$ into a new bin
+-   Put all remaining items in bins with enough space
+-   Create a new bin for all remaining items that not fit to any bin
+
+```js
+FirstFitBinPacking(S) {
+    let B = {};
+
+    for (let i in range(1, n)) {
+        if (size(i) <= size(b) (for some b in B)) {
+            // Put item i to existing bin b
+            size(b) = size(b) - size(i)
+        } else {
+            // Put item i into a fresh bin b'
+            B = B ∪ {bp} (where size(bp) = 1 - size(x))
+        }
+    }
+
+    return B;
+}
+```
+
+Now, first we find the bin with minimum size $w_j$, other bins have space less than $w_j$
+
+-   If $w_j \gt \frac{1}{2}$ we have used double size of optimal space
+-   If $w_j \leq \frac{1}{2}$:
+    $$
+    \begin{aligned}
+        & w_j \leq \frac{1}{2}
+        \\
+        & m \times w_j + (1 - w_j) = 1 + (m - 1) \times w_j
+        \\ \implies
+        & 1 + (m - 1) \times w_j \leq \frac{(m + 1)}{2}
+    \end{aligned}
+    $$
 
 ---
